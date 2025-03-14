@@ -6,17 +6,59 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div class="stage1">
+        <div id="stage1">
             <h1>Bank</h1>
-            <button>ADD PLAYER</button>
-            <>
+            <section id="stage1List"></section>
+            <button onclick="addPlayer()">ADD PLAYER</button>
+            <p>
+                Round<button onclick="roundDown()">-</button> <a id="rounds">10</a> <button onclick="roundUp()">+</button>
+            </p>
+            <button onclick="startGame()">Start Game</button>
         </div>
-        <div class="stage2">
+        <div id="stage2" style="display:none;">
+            <p>Round <a id="currentRound"></a>/<a id="totalRounds"></a></p>
+            <p>Points: <a id="points"></a></p>
+            <p><a id="playerTurn"></a>'s Turn</p>
+            <section class="grid-container">
+                <button onclick="click2()" id="button2" class="grid-item specialButton">2</button>
+                <button onclick="click3()" id="button3" class="grid-item specialButton">3</button>
+                <button onclick="click4()" id="button4" class="grid-item specialButton">4</button>
+                <button onclick="click5()" id="button5" class="grid-item specialButton">5</button>
+                <button onclick="click6()" id="button6" class="grid-item specialButton">6</button>
+                <button onclick="click7()" id="button7" class="grid-item specialButton">7</button>
+                <button onclick="click8()" id="button8" class="grid-item specialButton">8</button>
+                <button onclick="click9()" id="button9" class="grid-item specialButton">9</button>
+                <button onclick="click10()" id="button10" class="grid-item specialButton">10</button>
+                <button onclick="click11()" id="button11" class="grid-item specialButton">11</button>
+                <button onclick="click12()" id="button12" class="grid-item specialButton">12</button>
+                <button onclick="clickDoubles()" id="buttonDoubles" class="grid-item">Doubles</button>
+            <section>
         </div>
-        <div class="stage3">
+        <div id="stage3" style="display:none;">
+            <h1>ScoreBoard</h1>
+            <button onclick="newGameSamePlayers()">Same Players</button onclick="newGame()"><button>New Players</button>
         </div>
-        <template>
-
+        <footer>
+            <p>Room Code:<a id="room"></a></p>
+        </footer>
+        <template id="makePlayer">
+            <section>
+            <input placeholder="Enter Name"><button onclick="submitPlayer(event)">Submit</button>
+            </section>
         </template>
+        <template id="newPlayer">
+            <p>
+                <a>Player One</a><button onclick="deletePlayer(event)">🗑️</button>
+            </p>
+        </template>
+        <template id="scorePlayer">
+            <p>
+                <a>Player One</a> <a>100</a>
+            </p>
+        </template>
+        <template>
+            <p id="playerOne"><a>Player One</a> Points:<a>200</a> <a>40</a><button value="Player one" onclick="bank(this.value)">Bank It</button></p>
+        </template>
+        <script src="./app.js"></script>
     </body>
 </html>
