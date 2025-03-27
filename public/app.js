@@ -293,6 +293,9 @@ function bank(event, playerIndex) {
         playerElement = event.currentTarget.parentElement;
         playerElement.children[2].innerHTML = points;//3?
         event.currentTarget.classList.add('off');
+        if (playerTurn == playerList[playerIndex].name){
+            whoesTurn();
+        }
     }
     let test = 0;
     for (player of playerList) {
@@ -307,16 +310,16 @@ function bank(event, playerIndex) {
 }
 
 function whoesTurn() {
-    let currentPlayer = localStorage.getItem('playerTurn');
-    if (currentPlayer === null) {
-        currentPlayer = playerList[0].name;
+    playerTurn = localStorage.getItem('playerTurn');
+    if (playerTurn === null) {
+        playerTurn = playerList[0].name;
     } else {
         let found = false;
         let index = 0;
         let dontStop = true;
         while (dontStop) {
             for (i in playerList) {
-                if (found === false && playerList[i].name == currentPlayer) {
+                if (found === false && playerList[i].name == playerTurn) {
                     index = i;
                     found = true;
                 } else if (found === false) {
@@ -326,16 +329,16 @@ function whoesTurn() {
                     roundOver();
                     break;
                 } else if (playerList[i].bank === 0) {
-                    currentPlayer = playerList[i].name;
+                    playerTurn = playerList[i].name;
                     dontStop = false;
                     break;
                 }
             }
         }
     }
-    localStorage.setItem('playerTurn', currentPlayer);
+    localStorage.setItem('playerTurn', playerTurn);
     //const currentPlayer = playerList[(turn + offset) % playerList.length].name;
-    document.getElementById('playerTurn').innerHTML = currentPlayer;
+    document.getElementById('playerTurn').innerHTML = playerTurn;
     if (turn > 2) {
         document.getElementById("button2").classList.add('off');
         document.getElementById("button12").classList.add('off');
