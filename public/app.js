@@ -9,6 +9,7 @@ let stage = Number(localStorage.getItem('stage')) ?? 1;
 let playerList = localStorage.getItem('players') ? JSON.parse(localStorage.getItem('players')) : [];
 let points = Number(localStorage.getItem('points')) ?? 0;
 let offset = Number(localStorage.getItem('offset')) ?? 0;
+let playerTurn = localStorage.getItem('playerTurn') ?? null;
 
 
 //pull from memory the room code and validate it still works or ask for room code
@@ -36,7 +37,7 @@ function stageChange() {
                 child.children[0].children[1].innerHTML = playerList[playerIndex].points;
                 child.children[0].children[2].innerHTML = playerList[playerIndex].bank;//3?
                 child.children[0].children[3].value = playerIndex;//4?
-                if(playerList[playerIndex].bank == 0) {
+                if (playerList[playerIndex].bank == 0) {
                     child.children[0].children[3].classList.remove('off');
                 } else {
                     child.children[0].children[3].classList.add('off');
@@ -53,7 +54,7 @@ function stageChange() {
             const scoreBoardElement = document.getElementById('scoreBoard');
             playerList.sort((a, b) => b.points - a.points);
             let place = 1;
-            for(const player of playerList){
+            for (const player of playerList) {
                 //clone and add score board list.
                 const scoreBoardPlayer = document.getElementById('scorePlayer').content.cloneNode(true);
                 scoreBoardPlayer.children[0].children[0].innerHTML = place + 'ST ';
@@ -258,55 +259,82 @@ function clickDoubles() {
 }
 
 function newGameSamePlayers() {
-localStorage.setItem('turn', '0');
-localStorage.setItem('stage', '2');
-localStorage.setItem('points', '0');
-localStorage.setItem('offset', '0');
-localStorage.setItem('round', '1');
-//run through the players and reset there points and bank stat.
-for (playerIndex in playerList){
-    playerList[playerIndex].bank = 0;
-    playerList[playerIndex].points = 0;
-}
-localStorage.setItem('players', JSON.stringify(playerList));
-//reset room code or soemthing else
-location.reload();
+    localStorage.setItem('turn', '0');
+    localStorage.setItem('stage', '2');
+    localStorage.setItem('points', '0');
+    localStorage.setItem('offset', '0');
+    localStorage.setItem('round', '1');
+    //run through the players and reset there points and bank stat.
+    for (playerIndex in playerList) {
+        playerList[playerIndex].bank = 0;
+        playerList[playerIndex].points = 0;
+    }
+    localStorage.setItem('players', JSON.stringify(playerList));
+    //reset room code or soemthing else
+    location.reload();
 }
 
 function newGame() {
-localStorage.setItem('rounds', '10');
-localStorage.setItem('turn', '0');
-localStorage.setItem('stage', '1');
-localStorage.setItem('points', '0');
-localStorage.setItem('offset', '0');
-localStorage.setItem('round', '0');
-localStorage.setItem('players', '[]');
-//reset room code
-location.reload();
+    localStorage.setItem('rounds', '10');
+    localStorage.setItem('turn', '0');
+    localStorage.setItem('stage', '1');
+    localStorage.setItem('points', '0');
+    localStorage.setItem('offset', '0');
+    localStorage.setItem('round', '0');
+    localStorage.setItem('players', '[]');
+    //reset room code
+    location.reload();
 }
 
 function bank(event, playerIndex) {
-    if(playerList[playerIndex].bank == 0){
-    playerList[playerIndex].bank = points;
-    localStorage.setItem('players', JSON.stringify(playerList));
-    playerElement = event.currentTarget.parentElement;
-    playerElement.children[2].innerHTML = points;//3?
-    event.currentTarget.classList.add('off');
+    if (playerList[playerIndex].bank == 0) {
+        playerList[playerIndex].bank = points;
+        localStorage.setItem('players', JSON.stringify(playerList));
+        playerElement = event.currentTarget.parentElement;
+        playerElement.children[2].innerHTML = points;//3?
+        event.currentTarget.classList.add('off');
     }
     let test = 0;
-    for (player of playerList){
-        if(player.bank == 0){
+    for (player of playerList) {
+        if (player.bank == 0) {
             test += 1;
         }
     }
-    if(test == 0){
+    if (test == 0) {
         roundOver();
     }
 
 }
 
 function whoesTurn() {
-    const currentPlayer = playerList[(turn + offset) % playerList.length].name;
+    let currentPlayer = localStorage.getItem('playerTurn');
+    if (currentPlayer === null) {
+        currentPlayer = playerList[0].name;
+    } else {
+        let found = false;
+        let index = 0;
+        let dontStop = true;
+        while (dontStop) {
+            for (i in playerList) {
+                if (found === false && playerList[i].name == currentPlayer) {
+                    index = i;
+                    found = true;
+                } else if (found === false) {
+                    continue;
+                } else if (i === index && playerList[i].bank != 0) {
+                    dontStop = false;
+                    roundOver();
+                    break;
+                } else if (playerList[i].bank === 0) {
+                    currentPlayer = playerList[i].name;
+                    dontStop = false;
+                    break;
+                }
+            }
+        }
+    }
+    localStorage.setItem('playerTurn', currentPlayer);
+    //const currentPlayer = playerList[(turn + offset) % playerList.length].name;
     document.getElementById('playerTurn').innerHTML = currentPlayer;
     if (turn > 2) {
         document.getElementById("button2").classList.add('off');
@@ -345,7 +373,7 @@ function roundOver() {
         document.getElementById('points').innerHTML = 0;
         const playerListElement = document.getElementById("targetPlayerList");
         let index = 0;
-        for(const playerRow of playerListElement.children){
+        for (const playerRow of playerListElement.children) {
             playerRow.children[3].classList.remove('off');//4?
             //might have add stuff change point values
             playerRow.children[1].innerHTML = playerList[index].points;
