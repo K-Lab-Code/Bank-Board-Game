@@ -3,25 +3,41 @@
 
     <head>
         <title>ScoreBoard</title>
-        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="./scoreboard.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
         <div id="stage0">
             <p1>Pick Room</p1>
-            <input placeholder="Enter Room Code Here">
-            <input type="'submit">
+            <input placeholder="Enter Room Code Here" id="room">
+            <input type="submit" onclick="roomCode()">
         </div>
-        <div id="stage2">
         <div id="stage1">
             <p1>Game Has not Started Yet</p1>
         </div>
         <div id="stage2">
-
+            <h1>Player Stats</h1>
+            <h1>Round <a id="currentRound"></a>/<a id="totalRounds"></a></h1>
+            <h1>Points: <a id="points"></a></h1>
+            <h1>Players Turn: <a id="turn"></a></h1>
+            <section id="players"></section>
+            
         </div>
         <div id="stage3">
-
+            <h1>ScoreBoard</h1>
+            <section id="scoreBoard"></section>
         </div>
+        <footer>
+            <p>Room Code: <a id="roomCode"></a></p>
+        </footer>
+        <template id="playerRow">
+            <p id="playerOne"><a>Player One</a> Points:<a>200</a> Bank:<a>40</a></p>
+        </template>
+        <template id="scorePlayer">
+            <p>
+                <a>1st </a><a>Player One</a><a>100</a>
+            </p>
+        </template>
         <script src="./scoreboard.js"></script>
 
     </body>
