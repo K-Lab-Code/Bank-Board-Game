@@ -15,6 +15,7 @@ let playerTurn = localStorage.getItem('playerTurn') ?? null;
 //pull from memory the room code and validate it still works or ask for room code
 
 //load stage of app and switch to load that part of app
+
 function stageChange() {
     switch (stage) {
         case 1:
@@ -282,6 +283,7 @@ function newGame() {
     localStorage.setItem('offset', '0');
     localStorage.setItem('round', '0');
     localStorage.setItem('players', '[]');
+    localStorage.removeItem('playerTurn');
     //reset room code
     location.reload();
 }
@@ -310,14 +312,18 @@ function bank(event, playerIndex) {
 }
 
 function whoesTurn() {
+    console.log('here')
     playerTurn = localStorage.getItem('playerTurn');
     if (playerTurn === null) {
+        console.log('hereNull')
         playerTurn = playerList[0].name;
     } else {
+        console.log('hereElse')
         let found = false;
         let index = 0;
         let dontStop = true;
         while (dontStop) {
+            console.log('hereLoop')
             for (i in playerList) {
                 if (found === false && playerList[i].name == playerTurn) {
                     index = i;
